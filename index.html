@@ -3,128 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sut-Gyi-Shop | Gaming Store</title>
+    <title>Zay Cho - အမြန်မှာယူရန်</title>
     <style>
-        /* တစ်ခါတည်း အလုပ်လုပ်အောင် ဒီမှာ CSS ထည့်ပေးထားပါတယ် */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Pyidaungsu', sans-serif;
-            background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        :root { --primary: #2ecc71; --wave: #f39c12; --telegram: #24A1DE; --bg: #f2f5f8; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); padding-bottom: 100px; }
+        
+        /* User Entry Overlay */
+        #user-info-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;
         }
+        .form-box { width: 100%; max-width: 350px; text-align: center; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
+        .start-btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
-        .container {
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            padding: 20px;
+        /* Payment Modal */
+        #payment-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 3000; justify-content: center; align-items: center; padding: 20px;
         }
+        .payment-box { background: white; padding: 20px; border-radius: 15px; width: 100%; max-width: 330px; text-align: center; }
+        .qr-img { width: 100%; max-width: 220px; margin: 15px 0; border: 1px solid #eee; }
 
-        header h1 {
-            color: #0369a1;
-            font-size: 2.5rem;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
+        /* App Layout */
+        header { background: white; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .category-nav { display: flex; overflow-x: auto; padding: 10px; background: white; gap: 10px; position: sticky; top: 55px; z-index: 99; scrollbar-width: none; }
+        .cat-item { padding: 8px 18px; background: #eee; border-radius: 20px; white-space: nowrap; font-size: 13px; cursor: pointer; }
+        .cat-item.active { background: var(--primary); color: white; }
 
-        header p { color: #0ea5e9; font-weight: bold; margin-bottom: 30px; }
+        .menu-container { padding: 15px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .food-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .food-card img { width: 100%; height: 110px; object-fit: cover; }
+        .food-info { padding: 10px; }
+        .food-info h3 { margin: 0; font-size: 14px; height: 35px; overflow: hidden; color: #333; }
+        .food-info p { margin: 5px 0; color: var(--primary); font-weight: bold; font-size: 14px; }
+        .add-btn { width: 100%; background: #f0fdf4; border: 1px solid var(--primary); color: var(--primary); padding: 8px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
-        /* Card Animation */
-        .card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border: 2px solid #bae6fd;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            animation: float 4s ease-in-out infinite; /* ပျော့အိအိ လှုပ်နေမည့် animation */
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-        }
-
-        .card img { width: 80px; height: 80px; margin-bottom: 10px; }
-
-        .card h2 { margin: 10px 0; color: #333; }
-
-        button {
-            background: #0ea5e9;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        button:hover { background: #0284c7; transform: scale(1.1); }
-
-        /* Contact Section */
-        .contact-section {
-            margin-top: 30px;
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .social-btn {
-            text-decoration: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .telegram { background: #0088cc; }
-        .viber { background: #7360f2; }
+        .order-bar { position: fixed; bottom: 0; width: 100%; background: white; padding: 15px; box-shadow: 0 -2px 15px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        .checkout-btn { background: var(--telegram); color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <h1>Sut-Gyi-Shop</h1>
-            <p>Gaming Top-up & Services</p>
-        </header>
-
-        <div class="card">
-            <img src="https://img.icons8.com/color/96/mobile-legends.png" alt="MLBB">
-            <h2>MLBB Diamonds</h2>
-            <p>လျင်မြန်ပြီး စိတ်ချရသော Diamond အားဖြည့်ခြင်း</p>
-            <button>ဝယ်ယူမည်</button>
-        </div>
-
-        <div class="card">
-            <img src="https://img.icons8.com/color/96/pubg.png" alt="PUBG">
-            <h2>PUBG UC</h2>
-            <p>UC ဈေးနှုန်းအသစ်များဖြင့် အားဖြည့်ပါ</p>
-            <button>ဝယ်ယူမည်</button>
-        </div>
-
-        <div class="contact-section">
-            <h3>Contact Us</h3>
-            <div class="social-links">
-                <a href="https://t.me/yourusername" class="social-btn telegram">Telegram</a>
-                <a href="viber://add?number=yournumber" class="social-btn viber">Viber</a>
-            </div>
-        </div>
+<div id="user-info-overlay">
+    <div class="form-box">
+        <h1 style="color:var(--primary); margin-bottom:10px;">Zay Cho</h1>
+        <p style="color:#666; margin-bottom:20px;">မှာယူရန် အချက်အလက်ဖြည့်ပါ</p>
+        <input type="text" id="customer-name" placeholder="သင့်နာမည်">
+        <input type="tel" id="customer-phone" placeholder="ဖုန်းနံပါတ်">
+        <textarea id="customer-address" placeholder="ပို့ဆောင်ရမည့် လိပ်စာ" rows="3"></textarea>
+        <button class="start-btn" onclick="startApp()">ဈေးဝယ်မယ်</button>
     </div>
+</div>
+
+<div id="payment-modal">
+    <div class="payment-box">
+        <h3 style="margin:0;">Wave Money</h3>
+        <p style="color:var(--wave); font-weight:bold; margin:5px 0;">09662514508</p>
+        <img src="https://i.postimg.cc/85zP6mKk/1000014736.jpg" class="qr-img" alt="Wave QR">
+        <p style="font-size: 12px; color: #777;">ငွေလွှဲပြီး Screenshot ရိုက်ပါ။ <br> Telegram တွင် ပြေစာတွဲပို့ပေးပါ။</p>
+        <button class="start-btn" onclick="finalOrder()">ငွေလွှဲပြီးပြီ (Order ပို့မည်)</button>
+    </div>
+</div>
+
+<header><b>Zay Cho Delivery</b></header>
+
+<div class="category-nav">
+    <div class="cat-item active" onclick="filterMenu('all', this)">အားလုံး</div>
+    <div class="cat-item" onclick="filterMenu('breakfast', this)">နံနက်စာ</div>
+    <div class="cat-item" onclick="filterMenu('shan', this)">ရှမ်းရိုးရာ</div>
+    <div class="cat-item" onclick="filterMenu('fastfood', this)">အမြန်စား</div>
+    <div class="cat-item" onclick="filterMenu('drinks', this)">အအေး/ဘီယာ</div>
+</div>
+
+<div class="menu-container">
+    <div class="food-card" data-cat="breakfast">
+        <img src="https://i.postimg.cc/fRFpL499/mohinga.jpg" alt="မုန့်ဟင်းခါး">
+        <div class="food-info"><h3>မုန့်ဟင်းခါး (အစုံ)</h3><p>3,000 Ks</p><button class="add-btn" onclick="addToCart('မုန့်ဟင်းခါး', 3000)">မှာမည်</button></div>
+    </div>
+    <div class="food-card" data-cat="breakfast">
+        <img src="https://i.postimg.cc/mD8zH6C1/coconut-noodle.jpg" alt="အုန်းနို့ခေါက်ဆွဲ">
+        <div class="food-info"><h3>အုန်းနို့ခေါက်ဆွဲ</h3><p>2,000 Ks</p><button class="add-btn" onclick="addToCart('အုန်းနို့ခေါက်ဆွဲ', 2000)">မှာမည်</button></div>
+    </div>
+
+    <div class="food-card" data-cat="shan">
+        <img src="https://i.postimg.cc/G2Z6V4m2/shan-noodle.jpg" alt="ရှမ်းခေါက်ဆွဲ">
+        <div class="food-info"><h3>ရှမ်းခေါက်ဆွဲ</h3><p>3,000 Ks</p><button class="add-btn" onclick="addToCart('ရှမ်းခေါက်ဆွဲ', 3000)">မှာမည်</button></div>
+    </div>
+
+    <div class="food-card" data-cat="fastfood">
+        <img src="https://i.postimg.cc/Pq9tB7zN/mala.jpg" alt="မာလာရှမ်းကော">
+        <div class="food-info"><h3>မာလာရှမ်းကော</h3><p>12,000 Ks</p><button class="add-btn" onclick="addToCart('မာလာရှမ်းကော', 12000)">မှာမည်</button></div>
+    </div>
+
+    <div class="food-card" data-cat="drinks">
+        <img src="https://i.postimg.cc/kX4x1Hqg/coke.jpg" alt="Coca Cola">
+        <div class="food-info"><h3>Coca-Cola (600ml)</h3><p>1,200 Ks</p><button class="add-btn" onclick="addToCart('Coke', 1200)">မှာမည်</button></div>
+    </div>
+    <div class="food-card" data-cat="drinks">
+        <img src="https://i.postimg.cc/J0vjR3mD/beer.jpg" alt="Myanmar Beer">
+        <div class="food-info"><h3>Myanmar Beer</h3><p>3,500 Ks</p><button class="add-btn" onclick="addToCart('Beer', 3500)">မှာမည်</button></div>
+    </div>
+</div>
+
+<div class="order-bar">
+    <div>စုစုပေါင်း: <br><b id="total-price" style="font-size:18px; color:var(--primary)">0</b> Ks</div>
+    <button class="checkout-btn" onclick="showPayment()">ငွေချေမည်</button>
+</div>
+
+<script>
+    let cart = [];
+    let userData = {};
+    const myTelegramUser = "pouksa588";
+
+    function startApp() {
+        const name = document.getElementById('customer-name').value;
+        const phone = document.getElementById('customer-phone').value;
+        const address = document.getElementById('customer-address').value;
+        if(!name || !phone || !address) return alert("အချက်အလက်ပြည့်စုံစွာ ဖြည့်ပါ");
+        userData = { name, phone, address };
+        document.getElementById('user-info-overlay').style.display = 'none';
+    }
+
+    function addToCart(name, price) {
+        cart.push({name, price});
+        document.getElementById('total-price').innerText = cart.reduce((s, i) => s + i.price, 0).toLocaleString();
+    }
+
+    function showPayment() {
+        if(cart.length === 0) return alert("ပစ္စည်းရွေးပါဦး");
+        document.getElementById('payment-modal').style.display = 'flex';
+    }
+
+    function finalOrder() {
+        let text = `📦 *အော်ဒါအသစ် (Wave)*%0A👤 နာမည်: ${userData.name}%0A📞 ဖုန်း: ${userData.phone}%0A📍 လိပ်စာ: ${userData.address}%0A%0A--- ပစ္စည်းများ ---%0A`;
+        cart.forEach((item, i) => text += `${i+1}. ${item.name} - ${item.price} Ks%0A`);
+        text += `%0A💰 *စုစုပေါင်း: ${document.getElementById('total-price').innerText} Ks*`;
+        window.open(`https://t.me/${myTelegramUser}?text=${text}`, '_blank');
+        document.getElementById('payment-modal').style.display = 'none';
+    }
+
+    function filterMenu(cat, el) {
+        document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        document.querySelectorAll('.food-card').forEach(card => {
+            card.style.display = (cat === 'all' || card.dataset.cat === cat) ? 'block' : 'none';
+        });
+    }
+</script>
 
 </body>
 </html>
