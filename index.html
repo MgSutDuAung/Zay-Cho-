@@ -3,154 +3,351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zay Cho - အမြန်မှာယူရန်</title>
+    <title>Zay Cho Food Delivery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #2ecc71; --wave: #f39c12; --telegram: #24A1DE; --bg: #f2f5f8; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); padding-bottom: 100px; }
-        
-        /* User Entry Overlay */
-        #user-info-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;
+        /* CSS Section - Design ပိုင်း */
+        :root {
+            --primary-blue: #003399; /* အပြာရောင်နောက်ခံ */
+            --white: #ffffff; /* အဖြူရောင် Card များ */
+            --accent: #ff9800; /* လိမ္မော်ရောင် Highlight */
+            --light-bg: #eef2f7;
         }
-        .form-box { width: 100%; max-width: 350px; text-align: center; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
-        .start-btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
-        /* Payment Modal */
-        #payment-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 3000; justify-content: center; align-items: center; padding: 20px;
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--primary-blue);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 80px;
         }
-        .payment-box { background: white; padding: 20px; border-radius: 15px; width: 100%; max-width: 330px; text-align: center; }
-        .qr-img { width: 100%; max-width: 220px; margin: 15px 0; border: 1px solid #eee; }
 
-        /* App Layout */
-        header { background: white; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
-        .category-nav { display: flex; overflow-x: auto; padding: 10px; background: white; gap: 10px; position: sticky; top: 55px; z-index: 99; scrollbar-width: none; }
-        .cat-item { padding: 8px 18px; background: #eee; border-radius: 20px; white-space: nowrap; font-size: 13px; cursor: pointer; }
-        .cat-item.active { background: var(--primary); color: white; }
+        /* Welcome Screen (နာမည်/ဖုန်း/Location ယူရန်) */
+        #login-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2000;
+        }
 
-        .menu-container { padding: 15px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .food-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .food-card img { width: 100%; height: 110px; object-fit: cover; }
-        .food-info { padding: 10px; }
-        .food-info h3 { margin: 0; font-size: 14px; height: 35px; overflow: hidden; color: #333; }
-        .food-info p { margin: 5px 0; color: var(--primary); font-weight: bold; font-size: 14px; }
-        .add-btn { width: 100%; background: #f0fdf4; border: 1px solid var(--primary); color: var(--primary); padding: 8px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .login-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 85%;
+            max-width: 400px;
+            text-align: center;
+        }
 
-        .order-bar { position: fixed; bottom: 0; width: 100%; background: white; padding: 15px; box-shadow: 0 -2px 15px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
-        .checkout-btn { background: var(--telegram); color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .login-card input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            text-align: center;
+            padding: 20px;
+            border-bottom: 5px solid var(--accent);
+            border-radius: 0 0 25px 25px;
+        }
+
+        /* Menu Display */
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .category-title {
+            color: white;
+            margin: 25px 0 15px;
+            font-size: 1.3rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 10px;
+        }
+
+        .menu-item {
+            background: var(--white);
+            border-radius: 18px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .menu-item img {
+            width: 75px;
+            height: 75px;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .item-detail { flex: 1; }
+        .item-detail h3 { margin: 0; font-size: 1rem; color: #333; }
+        .item-detail p { margin: 5px 0; color: var(--primary-blue); font-weight: bold; }
+
+        .add-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Cart & Footer */
+        .cart-bar {
+            position: fixed;
+            bottom: 20px; right: 20px;
+            background: var(--accent);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .cart-panel {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: white;
+            border-radius: 30px 30px 0 0;
+            padding: 25px;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.4);
+            display: none;
+            box-sizing: border-box;
+            z-index: 1500;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .qty-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-qty {
+            background: #eee;
+            border: none;
+            width: 25px; height: 25px;
+            border-radius: 5px;
+        }
+
+        .btn-order {
+            background: #28a745;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .trash-btn { color: #ff4444; margin-left: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div id="user-info-overlay">
-    <div class="form-box">
-        <h1 style="color:var(--primary); margin-bottom:10px;">Zay Cho</h1>
-        <p style="color:#666; margin-bottom:20px;">မှာယူရန် အချက်အလက်ဖြည့်ပါ</p>
-        <input type="text" id="customer-name" placeholder="သင့်နာမည်">
-        <input type="tel" id="customer-phone" placeholder="ဖုန်းနံပါတ်">
-        <textarea id="customer-address" placeholder="ပို့ဆောင်ရမည့် လိပ်စာ" rows="3"></textarea>
-        <button class="start-btn" onclick="startApp()">ဈေးဝယ်မယ်</button>
-    </div>
-</div>
-
-<div id="payment-modal">
-    <div class="payment-box">
-        <h3 style="margin:0;">Wave Money</h3>
-        <p style="color:var(--wave); font-weight:bold; margin:5px 0;">09662514508</p>
-        <img src="https://i.postimg.cc/85zP6mKk/1000014736.jpg" class="qr-img" alt="Wave QR">
-        <p style="font-size: 12px; color: #777;">ငွေလွှဲပြီး Screenshot ရိုက်ပါ။ <br> Telegram တွင် ပြေစာတွဲပို့ပေးပါ။</p>
-        <button class="start-btn" onclick="finalOrder()">ငွေလွှဲပြီးပြီ (Order ပို့မည်)</button>
-    </div>
-</div>
-
-<header><b>Zay Cho Delivery</b></header>
-
-<div class="category-nav">
-    <div class="cat-item active" onclick="filterMenu('all', this)">အားလုံး</div>
-    <div class="cat-item" onclick="filterMenu('breakfast', this)">နံနက်စာ</div>
-    <div class="cat-item" onclick="filterMenu('shan', this)">ရှမ်းရိုးရာ</div>
-    <div class="cat-item" onclick="filterMenu('fastfood', this)">အမြန်စား</div>
-    <div class="cat-item" onclick="filterMenu('drinks', this)">အအေး/ဘီယာ</div>
-</div>
-
-<div class="menu-container">
-    <div class="food-card" data-cat="breakfast">
-        <img src="https://i.postimg.cc/fRFpL499/mohinga.jpg" alt="မုန့်ဟင်းခါး">
-        <div class="food-info"><h3>မုန့်ဟင်းခါး (အစုံ)</h3><p>3,000 Ks</p><button class="add-btn" onclick="addToCart('မုန့်ဟင်းခါး', 3000)">မှာမည်</button></div>
-    </div>
-    <div class="food-card" data-cat="breakfast">
-        <img src="https://i.postimg.cc/mD8zH6C1/coconut-noodle.jpg" alt="အုန်းနို့ခေါက်ဆွဲ">
-        <div class="food-info"><h3>အုန်းနို့ခေါက်ဆွဲ</h3><p>2,000 Ks</p><button class="add-btn" onclick="addToCart('အုန်းနို့ခေါက်ဆွဲ', 2000)">မှာမည်</button></div>
+    <div id="login-screen">
+        <div class="login-card">
+            <h2 style="color: var(--primary-blue);">Zay Cho Delivery</h2>
+            <p>ပို့ဆောင်ရန် အချက်အလက်ဖြည့်ပါ</p>
+            <input type="text" id="cus-name" placeholder="သင့်နာမည်">
+            <input type="tel" id="cus-phone" placeholder="သင့်ဖုန်းနံပါတ်">
+            <button class="btn-order" onclick="getGPS()">တည်နေရာရယူပြီး စတင်မည်</button>
+        </div>
     </div>
 
-    <div class="food-card" data-cat="shan">
-        <img src="https://i.postimg.cc/G2Z6V4m2/shan-noodle.jpg" alt="ရှမ်းခေါက်ဆွဲ">
-        <div class="food-info"><h3>ရှမ်းခေါက်ဆွဲ</h3><p>3,000 Ks</p><button class="add-btn" onclick="addToCart('ရှမ်းခေါက်ဆွဲ', 3000)">မှာမည်</button></div>
+    <header>
+        <h1 style="margin:0; font-size: 1.8rem; color: var(--primary-blue);">ZAY CHO</h1>
+        <p style="margin:5px 0 0; color: #666;">Fast & Reliable Food Service</p>
+    </header>
+
+    <div class="container">
+        <h2 class="category-title">နံနက်စာ</h2>
+        <div class="menu-item">
+            <img src="https://i.postimg.cc/fRFpL499/mohinga.jpg" alt="မုန့်ဟင်းခါး">
+            <div class="item-detail">
+                <h3>မုန့်ဟင်းခါး (အကြော်စုံ)</h3>
+                <p>3,000 ကျပ်</p>
+            </div>
+            <button class="add-btn" onclick="addToCart('မုန့်ဟင်းခါး', 3000)">+</button>
+        </div>
+
+        <div class="menu-item">
+            <img src="https://via.placeholder.com/100" alt="အုန်းနို့ခေါက်ဆွဲ">
+            <div class="item-detail">
+                <h3>အုန်းနို့ခေါက်ဆွဲ</h3>
+                <p>2,000 ကျပ်</p>
+            </div>
+            <button class="add-btn" onclick="addToCart('အုန်းနို့ခေါက်ဆွဲ', 2000)">+</button>
+        </div>
+
+        <h2 class="category-title">ရှမ်းရိုးရာမီနူး</h2>
+        <div class="menu-item">
+            <img src="https://via.placeholder.com/100" alt="ရှမ်းခေါက်ဆွဲ">
+            <div class="item-detail">
+                <h3>ရှမ်းခေါက်ဆွဲ (အရည်/အသုတ်)</h3>
+                <p>3,000 ကျပ်</p>
+            </div>
+            <button class="add-btn" onclick="addToCart('ရှမ်းခေါက်ဆွဲ', 3000)">+</button>
+        </div>
     </div>
 
-    <div class="food-card" data-cat="fastfood">
-        <img src="https://i.postimg.cc/Pq9tB7zN/mala.jpg" alt="မာလာရှမ်းကော">
-        <div class="food-info"><h3>မာလာရှမ်းကော</h3><p>12,000 Ks</p><button class="add-btn" onclick="addToCart('မာလာရှမ်းကော', 12000)">မှာမည်</button></div>
+    <div class="cart-bar" onclick="showCart()">
+        <i class="fas fa-shopping-basket"></i> ခြင်းတောင်း (<span id="count">0</span>)
     </div>
 
-    <div class="food-card" data-cat="drinks">
-        <img src="https://i.postimg.cc/kX4x1Hqg/coke.jpg" alt="Coca Cola">
-        <div class="food-info"><h3>Coca-Cola (600ml)</h3><p>1,200 Ks</p><button class="add-btn" onclick="addToCart('Coke', 1200)">မှာမည်</button></div>
+    <div id="cart-panel" class="cart-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3>ရွေးချယ်ထားသော စာရင်း</h3>
+            <span onclick="hideCart()" style="font-size:2rem; cursor:pointer;">&times;</span>
+        </div>
+        <div id="cart-list"></div>
+        <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.2rem; margin:15px 0;">
+            <span>စုစုပေါင်း:</span>
+            <span><span id="total">0</span> ကျပ်</span>
+        </div>
+        
+        <select id="pay-style" style="width:100%; padding:10px; border-radius:10px; margin-bottom:10px;">
+            <option value="Cash on Delivery">အိမ်ရောက်မှငွေချေမည်</option>
+            <option value="Wave Money">Wave Money (09662514508)</option>
+        </select>
+
+        <button class="btn-order" onclick="submitOrder()">အော်ဒါတင်မည် (Telegram)</button>
     </div>
-    <div class="food-card" data-cat="drinks">
-        <img src="https://i.postimg.cc/J0vjR3mD/beer.jpg" alt="Myanmar Beer">
-        <div class="food-info"><h3>Myanmar Beer</h3><p>3,500 Ks</p><button class="add-btn" onclick="addToCart('Beer', 3500)">မှာမည်</button></div>
-    </div>
-</div>
 
-<div class="order-bar">
-    <div>စုစုပေါင်း: <br><b id="total-price" style="font-size:18px; color:var(--primary)">0</b> Ks</div>
-    <button class="checkout-btn" onclick="showPayment()">ငွေချေမည်</button>
-</div>
+    <script>
+        // JavaScript Section - လုပ်ဆောင်ချက်ပိုင်း
+        let cart = [];
+        let userLocation = "";
 
-<script>
-    let cart = [];
-    let userData = {};
-    const myTelegramUser = "pouksa588";
+        // 1. GPS တည်နေရာယူခြင်း
+        function getGPS() {
+            const name = document.getElementById('cus-name').value;
+            const phone = document.getElementById('cus-phone').value;
 
-    function startApp() {
-        const name = document.getElementById('customer-name').value;
-        const phone = document.getElementById('customer-phone').value;
-        const address = document.getElementById('customer-address').value;
-        if(!name || !phone || !address) return alert("အချက်အလက်ပြည့်စုံစွာ ဖြည့်ပါ");
-        userData = { name, phone, address };
-        document.getElementById('user-info-overlay').style.display = 'none';
-    }
+            if(!name || !phone) { alert("နာမည်နှင့်ဖုန်း ဖြည့်ပါ"); return; }
 
-    function addToCart(name, price) {
-        cart.push({name, price});
-        document.getElementById('total-price').innerText = cart.reduce((s, i) => s + i.price, 0).toLocaleString();
-    }
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    userLocation = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
+                    document.getElementById('login-screen').style.display = 'none';
+                    alert("Location ရရှိပါပြီ။ စတင်မှာယူနိုင်ပါပြီ။");
+                }, () => {
+                    alert("Location ခွင့်ပြုချက် ပေးရပါမည်။");
+                });
+            }
+        }
 
-    function showPayment() {
-        if(cart.length === 0) return alert("ပစ္စည်းရွေးပါဦး");
-        document.getElementById('payment-modal').style.display = 'flex';
-    }
+        // 2. ခြင်းတောင်းထဲထည့်ခြင်း
+        function addToCart(name, price) {
+            let item = cart.find(i => i.name === name);
+            if(item) { item.qty++; } 
+            else { cart.push({name, price, qty: 1}); }
+            renderCart();
+        }
 
-    function finalOrder() {
-        let text = `📦 *အော်ဒါအသစ် (Wave)*%0A👤 နာမည်: ${userData.name}%0A📞 ဖုန်း: ${userData.phone}%0A📍 လိပ်စာ: ${userData.address}%0A%0A--- ပစ္စည်းများ ---%0A`;
-        cart.forEach((item, i) => text += `${i+1}. ${item.name} - ${item.price} Ks%0A`);
-        text += `%0A💰 *စုစုပေါင်း: ${document.getElementById('total-price').innerText} Ks*`;
-        window.open(`https://t.me/${myTelegramUser}?text=${text}`, '_blank');
-        document.getElementById('payment-modal').style.display = 'none';
-    }
+        // 3. အရေအတွက် အတိုးအလျှော့ နှင့် ဖျက်ခြင်း
+        function changeQty(name, delta) {
+            let item = cart.find(i => i.name === name);
+            if(item) {
+                item.qty += delta;
+                if(item.qty <= 0) cart = cart.filter(i => i.name !== name);
+            }
+            renderCart();
+        }
 
-    function filterMenu(cat, el) {
-        document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
-        el.classList.add('active');
-        document.querySelectorAll('.food-card').forEach(card => {
-            card.style.display = (cat === 'all' || card.dataset.cat === cat) ? 'block' : 'none';
-        });
-    }
-</script>
+        function deleteItem(name) {
+            cart = cart.filter(i => i.name !== name);
+            renderCart();
+        }
 
+        // 4. Cart ပြသခြင်း
+        function renderCart() {
+            const list = document.getElementById('cart-list');
+            const totalText = document.getElementById('total');
+            const countText = document.getElementById('count');
+            
+            list.innerHTML = "";
+            let total = 0;
+            let count = 0;
+
+            cart.forEach(item => {
+                total += (item.price * item.qty);
+                count += item.qty;
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <b>${item.name}</b><br>
+                            <small>${item.price} ကျပ်</small>
+                        </div>
+                        <div class="qty-box">
+                            <button class="btn-qty" onclick="changeQty('${item.name}', -1)">-</button>
+                            <span>${item.qty}</span>
+                            <button class="btn-qty" onclick="changeQty('${item.name}', 1)">+</button>
+                            <i class="fas fa-trash trash-btn" onclick="deleteItem('${item.name}')"></i>
+                        </div>
+                    </div>
+                `;
+            });
+            totalText.innerText = total.toLocaleString();
+            countText.innerText = count;
+        }
+
+        function showCart() { document.getElementById('cart-panel').style.display = 'block'; }
+        function hideCart() { document.getElementById('cart-panel').style.display = 'none'; }
+
+        // 5. Telegram သို့ ပို့ခြင်း
+        function submitOrder() {
+            if(cart.length === 0) return alert("ပစ္စည်းရွေးပါဦး");
+
+            let name = document.getElementById('cus-name').value;
+            let phone = document.getElementById('cus-phone').value;
+            let pay = document.getElementById('pay-style').value;
+            let itemsText = cart.map(i => `${i.name} - ${i.qty}ခု`).join('%0A');
+            let total = document.getElementById('total').innerText;
+
+            let text = `🛒 *New Order - Zay Cho*%0A%0A` +
+                       `👤 နာမည်: ${name}%0A` +
+                       `📞 ဖုန်း: ${phone}%0A` +
+                       `🍱 မှာယူမှု: %0A${itemsText}%0A` +
+                       `💰 စုစုပေါင်း: ${total} ကျပ်%0A` +
+                       `💳 ငွေချေစနစ်: ${pay}%0A` +
+                       `📍 တည်နေရာ: ${userLocation}`;
+
+            const botToken = "8056079963:AAG1W-o7Y33F9ZqTiaMhWcl6l9XmZ9I94jY";
+            const chatId = "6547610057";
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${text}&parse_mode=Markdown`;
+
+            fetch(url).then(res => {
+                if(res.ok) {
+                    alert("အော်ဒါ ပို့ဆောင်ပြီးပါပြီ။ ခေတ္တစောင့်ဆိုင်းပေးပါ။");
+                    cart = []; renderCart(); hideCart();
+                }
+            });
+        }
+    </script>
 </body>
 </html>
